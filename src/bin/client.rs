@@ -2,6 +2,7 @@ use clipsync::{compute_hash, read_message, send_message};
 use std::{
     net::TcpStream,
     process::Command,
+    process::Stdio,
     sync::{Arc, Mutex},
 };
 
@@ -15,7 +16,13 @@ fn get_clipboard() -> Option<String> {
 }
 
 fn set_clipboard(text: &str) {
-    let _ = Command::new("wl-copy").arg("--").arg(text).output();
+    let _ = Command::new("wl-copy")
+        .arg("--")
+        .arg(text)
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .status();
 }
 
 fn main() -> std::io::Result<()> {
@@ -52,10 +59,10 @@ fn main() -> std::io::Result<()> {
             let h = compute_hash(text.as_bytes());
             let mut guard = last_hash.lock().unwrap();
             if *guard != h {
-                println!(">> Обнаружен новый буфер [{} байт]: {:?}", text.len(), text);
+                println!(">> Found new bugger [{} bytes]: {:?}", text.len(), text);
                 *guard = h;
                 send_message(&mut stream, &text)?;
-                println!(">> Успешно отправлено в сеть!");
+                println!(">> Successfully sent to network!");
             }
         }
     }
