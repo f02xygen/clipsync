@@ -16,7 +16,7 @@ fn handle_client(mut stream: TcpStream, addr: SocketAddr, clients: Arc<Mutex<Vec
                 break;
             }
             Ok(msg) => {
-                println!("Got from {}: {}", msg.sender, msg.body);
+                println!("Got from {}", msg.sender);
                 let mut clients_guard = clients.lock().unwrap();
                 for other_client in clients_guard.iter_mut() {
                     if other_client.peer_addr().ok() != Some(addr) {
