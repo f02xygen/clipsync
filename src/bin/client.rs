@@ -52,8 +52,10 @@ fn main() -> std::io::Result<()> {
             let h = compute_hash(text.as_bytes());
             let mut guard = last_hash.lock().unwrap();
             if *guard != h {
+                println!(">> Обнаружен новый буфер [{} байт]: {:?}", text.len(), text);
                 *guard = h;
                 send_message(&mut stream, &text)?;
+                println!(">> Успешно отправлено в сеть!");
             }
         }
     }
