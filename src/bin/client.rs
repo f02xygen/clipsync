@@ -31,7 +31,11 @@ fn main() -> std::io::Result<()> {
         .unwrap_or(0);
     let last_hash = Arc::new(Mutex::new(initial_hash));
     let last_hash_clone = Arc::clone(&last_hash);
-    let mut stream = TcpStream::connect("127.0.0.1:9090")?;
+
+    let server_addr = std::env::args()
+        .nth(1)
+        .unwrap_or_else(|| "127.0.0.1:9090".to_string());
+    let mut stream = TcpStream::connect(server_addr)?;
     println!("Client connected!");
 
     let mut reader = stream.try_clone()?;
@@ -59,7 +63,7 @@ fn main() -> std::io::Result<()> {
             let h = compute_hash(text.as_bytes());
             let mut guard = last_hash.lock().unwrap();
             if *guard != h {
-                println!(">> Found new bugger [{} bytes]: {:?}", text.len(), text);
+                println!(">> Found new buffer [{} bytes]: {:?}", text.len(), text);
                 *guard = h;
                 send_message(&mut stream, &text)?;
                 println!(">> Successfully sent to network!");

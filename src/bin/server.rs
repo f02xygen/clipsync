@@ -37,7 +37,10 @@ fn handle_client(mut stream: TcpStream, addr: SocketAddr, clients: Arc<Mutex<Vec
 }
 
 fn main() -> std::io::Result<()> {
-    let listener = TcpListener::bind("0.0.0.0:9090")?;
+    let listener_addr = std::env::args()
+        .nth(1)
+        .unwrap_or_else(|| "0.0.0.0:9090".to_string());
+    let listener = TcpListener::bind(listener_addr)?;
     let clients = Arc::new(Mutex::new(Vec::<TcpStream>::new()));
     println!("Server started!");
     for stream in listener.incoming() {
