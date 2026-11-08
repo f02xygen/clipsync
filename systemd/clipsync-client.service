@@ -1,0 +1,14 @@
+[Unit]
+Description=Clipsync Clipboard Sync Client
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+EnvironmentFile=-%h/.config/clipsync/client.env
+ExecStart=%h/.local/bin/clipsync-client $CLIPSYNC_SERVER $CLIPSYNC_NAME
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target

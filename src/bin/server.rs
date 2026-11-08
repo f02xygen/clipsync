@@ -1,4 +1,4 @@
-use clipsync::{Message, read_message, send_message};
+use clipsync::{read_message, send_message};
 use std::{
     net::{SocketAddr, TcpListener, TcpStream},
     sync::{Arc, Mutex},

@@ -1,0 +1,12 @@
+[Unit]
+Description=Clipsync TCP Broadcast Server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/clipsync-server 0.0.0.0:9090
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target

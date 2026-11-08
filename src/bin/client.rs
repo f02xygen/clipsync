@@ -105,7 +105,7 @@ fn main() -> std::io::Result<()> {
                 }
                 Err(_) => {
                     println!("Disconnected from server.");
-                    break;
+                    std::process::exit(1);
                 }
             }
         }
@@ -138,6 +138,4 @@ fn main() -> std::io::Result<()> {
             }
         }
     }
-
-    Ok(())
 }
